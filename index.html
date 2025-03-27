@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OXYGReen</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <style>
+    #root {
+      width: 103%;
+      height: auto;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+    #blocked {
+      display: none;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 20%;
+    }
+  </style>
+  <body>
+    <div id="root"></div>
+    <div id="blocked">Open it on Telegram</div>
+
+    <script type="module" src="/src/main.jsx"></script>
+
+    <script>
+      // Function to check if the app is running inside Telegram WebApp
+      function isTelegramWebApp() {
+        return window.Telegram && window.Telegram.WebApp;
+      }
+
+      // If not in Telegram WebApp, block the content
+      if (!isTelegramWebApp()) {
+        document.getElementById("root").style.display = "none";
+        document.getElementById("blocked").style.display = "block";
+      }
+
+      // Prevent Right Click
+      document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+      // Disable certain keyboard shortcuts (CTRL + U, CTRL + S, CTRL + SHIFT + I, etc.)
+      document.addEventListener("keydown", (e) => {
+        if (
+          e.ctrlKey &&
+          (e.key === "u" || e.key === "s" || e.key === "i" || e.key === "j" || e.key === "h")
+        ) {
+          e.preventDefault();
+        }
+      });
+
+      // Silent DevTools detection (No Unauthorized Access message)
+      setInterval(() => {
+        if (
+          window.outerHeight - window.innerHeight > 100 ||
+          window.outerWidth - window.innerWidth > 100
+        ) {
+          document.body.innerHTML = "";
+        }
+      }, 1000);
+      const devtools = new Function("debugger");
+setInterval(() => {
+  try {
+    devtools();
+    document.head.innerHTML = ""; // Remove all stylesheets
+  } catch (e) {}
+}, 1000);
+
+    </script>
+  </body>
+</html>
